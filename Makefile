@@ -21,4 +21,4 @@ tomcat_deploy:
 	curl -v -u $(user):$(pwd) -T $(war-path) 'http://localhost:$(port)/manager/text/deploy?path=/$(war-path)&update=true'
 
 tomcat_undeploy:
-	
+	curl -v -u $(user):$(pwd) http://localhost:$(port)/manager/text/undeploy?path=/$(war-path)
