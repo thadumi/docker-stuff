@@ -25,5 +25,12 @@ RUN apk add --no-cache openjdk8 \
 COPY config/tomcat-users.xml ${TOMCAT}/conf
 #RUN sh ${TOMCAT}/bin/catalina.sh start
 
+# We are going to run Tomcat for creating the default configuratoin files which then we are going to modify
+RUN sh catalina.sh start \
+    && sleep 1 \
+    && sh catalina.sh stop -force \
+    && sed -1 "s/<Valve/<--Valve/; s/[0,:]*1\" \/>/0:0:0:0:0:0:0:1\" \/-->/" webapps/manager/META-INF/context.xml \
+    && sed -1 "s/<Valve/<--Valve/; s/[0,:]*1\" \/>/0:0:0:0:0:0:0:1\" \/-->/" webapps/host-manager/META-INF/context.xml
+
 EXPOSE 8080
 ENTRYPOINT /bin/sh bin/catalina.sh run
